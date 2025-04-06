@@ -1,0 +1,212 @@
+/* Base Reset */
+* {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Taviraj', serif;
+        background-color: #eafaf1; /* soft pastel green */
+        color: #2e2e2e;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Dark Mode */
+    body.dark-mode {
+        background-color: #1e1e1e;
+        color: #f2f2f2;
+    }
+    
+    /* Containers */
+    #password-form,
+    #content {
+        background: #ffffff;
+        width: 100%;
+        max-width: 400px;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+    
+    body.dark-mode #password-form,
+    body.dark-mode #content {
+        background: #2b2b2b;
+    }
+    
+    /* Headings */
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    h3 {
+        font-weight: normal;
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 1.5rem;
+    }
+    
+    body.dark-mode h3 {
+        color: #ccc;
+    }
+    
+    /* Labels */
+    label {
+        display: block;
+        text-align: left;
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+        color: #444;
+    }
+    
+    body.dark-mode label {
+        color: #ddd;
+    }
+    
+    /* Inputs */
+    input[type="password"],
+    input[type="text"] {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        background-color: #f7fdf9;
+        color: #333;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    body.dark-mode input[type="password"],
+    body.dark-mode input[type="text"] {
+        background-color: #3a3a3a;
+        color: #f2f2f2;
+        border: 1px solid #555;
+    }
+    
+    /* Buttons */
+    button {
+        background-color: #7ed6a5; /* pastel green accent */
+        color: #fff;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    button:hover {
+        background-color: #55c98e;
+    }
+    
+    body.dark-mode button {
+        background-color: #444;
+    }
+    
+    body.dark-mode button:hover {
+        background-color: #666;
+    }
+    
+    /* Error Message */
+    #error-message {
+        margin-top: 0.5em;
+        color: #d9534f;
+        font-size: 0.9rem;
+    }
+    
+    /* Cipher Tool */
+    #cipher-tool {
+        margin-top: 2rem;
+        text-align: left;
+    }
+    
+    #cipher-tool label {
+        margin-bottom: 0.3rem;
+    }
+    
+    #cipherResult {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        font-family: 'Ubuntu Condensed', sans-serif;
+    }
+    
+    /* Media Queries */
+    @media (min-width: 768px) {
+        body {
+            padding: 3rem;
+        }
+    
+        h1 {
+            font-size: 2.2rem;
+        }
+    
+        h3 {
+            font-size: 1.3rem;
+        }
+    
+        input, button {
+            font-size: 1.1rem;
+        }
+    }
+
+    #theme-toggle-wrapper {
+        position: fixed;
+        bottom: 1rem;
+        left: 1rem;
+        z-index: 100;
+    }
+    
+    #theme-toggle {
+        background-color: #7ed6a5;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: background-color 0.2s ease;
+    }
+    
+    #theme-toggle:hover {
+        background-color: #55c98e;
+    }
+    
+    body.dark-mode #theme-toggle {
+        background-color: #444;
+    }
+
+    #copyButton {
+        margin-top: 1rem;
+        background-color: #7ed6a5; /* pastel green */
+        color: #fff;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        display: inline-block;
+    }
+    
+    #copyButton:hover {
+        background-color: #55c98e;
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+    
+    
+    
