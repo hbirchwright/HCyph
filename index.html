@@ -20,6 +20,24 @@
     <div id="cipher-tool">
       <label for="plainText">Enter text:</label>
       <input type="text" id="plainText" placeholder="Type here...">
+
+      <label for="shiftType">Choose shift type:</label>
+      <select id="shiftType">
+        <option value="daily">Daily Shift</option>
+        <option value="custom">Custom Shift</option>
+        <option value="person">Person-Based Shift</option>
+      </select>
+
+      <div id="customShiftContainer" style="display:none; margin-top:0.5rem;">
+        <label for="customShift">Enter custom shift:</label>
+        <input type="number" id="customShift" placeholder="e.g., 5">
+      </div>
+
+      <div id="personShiftContainer" style="display:none; margin-top:0.5rem;">
+        <label for="personName">Enter person's name:</label>
+        <input type="text" id="personName" placeholder="e.g., Alice">
+      </div>
+
       <button onclick="encryptText()">Encrypt</button>
       <p><strong>Encrypted:</strong> <span id="cipherResult"></span></p>
       <button id="copyButton" style="display:none;">Copy</button>
@@ -66,11 +84,6 @@
       }
     }
 
-    function getTodayShift() {
-      const today = new Date();
-      return today.getDate();
-    }
-
     function caesarCipher(str, shift) {
       return str.split('').map(char => {
         if (char.match(/[a-z]/i)) {
@@ -97,9 +110,24 @@
       }).join('');
     }
 
+    function getShift() {
+      const shiftType = document.getElementById("shiftType").value;
+      
+      if (shiftType === "daily") {
+        return new Date().getDate();
+      } else if (shiftType === "custom") {
+        const customShift = parseInt(document.getElementById("customShift").value, 10);
+        return isNaN(customShift) ? 0 : customShift;
+      } else if (shiftType === "person") {
+        const name = document.getElementById("personName").value || "";
+        return Array.from(name).reduce((sum, c) => sum + c.charCodeAt(0), 0) % 26;
+      }
+      return 0;
+    }
+
     function encryptText() {
       const input = document.getElementById("plainText").value;
-      const shift = getTodayShift();
+      const shift = getShift();
       const caesar = caesarCipher(input, shift);
       const encrypted = applyCustomSubstitution(caesar);
       const cipherResult = document.getElementById("cipherResult");
@@ -109,19 +137,18 @@
       copyButton.style.display = "inline-block";
 
       copyButton.onclick = function() {
-        const range = document.createRange();
-        range.selectNode(cipherResult);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        try {
-          document.execCommand('copy');
-          alert("Copied to clipboard!");
-        } catch (err) {
-          console.error("Error copying text: ", err);
-        }
-        window.getSelection().removeAllRanges();
+        navigator.clipboard.writeText(cipherResult.textContent)
+          .then(() => alert("Copied to clipboard!"))
+          .catch(err => console.error("Error copying text: ", err));
       };
     }
+
+    // Show/hide custom input fields
+    document.getElementById("shiftType").addEventListener("change", function() {
+      const type = this.value;
+      document.getElementById("customShiftContainer").style.display = (type === "custom") ? "block" : "none";
+      document.getElementById("personShiftContainer").style.display = (type === "person") ? "block" : "none";
+    });
   </script>
 </body>
 </html>

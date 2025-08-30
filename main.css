@@ -1,146 +1,166 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Taviraj', serif;
+  background-color: #1e1e1e;
+  color: #f2f2f2;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Containers */
+#password-form,
+#content {
+  background: #2b2b2b;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/* Headings */
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+h3 {
+  font-weight: normal;
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-bottom: 1.5rem;
+}
+
+/* Labels */
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #ddd;
+}
+
+/* Inputs */
+input[type="password"],
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #555;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #3a3a3a;
+  color: #f2f2f2;
+}
+
+/* Dropdown */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+  padding-right: 2rem;
+  cursor: pointer;
+}
+
+/* Buttons */
+button {
+  background-color: #444;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #666;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Error Message */
+#error-message {
+  margin-top: 0.5em;
+  color: #d9534f;
+  font-size: 0.9rem;
+}
+
+/* Cipher Tool */
+#cipher-tool {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+#cipher-tool label {
+  margin-bottom: 0.3rem;
+}
+
+#cipherResult {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  color: #7ed6a5;
+  font-family: 'Ubuntu Condensed', sans-serif;
+}
+
+/* Copy button */
+#copyButton {
+  margin-top: 1rem;
+  background-color: #444;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+}
+
+#copyButton:hover {
+  background-color: #666;
+}
+
+/* Containers for additional inputs */
+#customShiftContainer,
+#personShiftContainer {
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
   body {
-    font-family: 'Taviraj', serif;
-    background-color: #1e1e1e;
-    color: #f2f2f2;
-    padding: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  
-  /* Containers */
-  #password-form,
-  #content {
-    background: #2b2b2b;
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    text-align: center;
-  }
-  
-  /* Headings */
-  h1 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  h3 {
-    font-weight: normal;
-    font-size: 1.1rem;
-    color: #ccc;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Labels */
-  label {
-    display: block;
-    text-align: left;
-    margin-bottom: 0.4rem;
-    font-weight: 500;
-    color: #ddd;
-  }
-  
-  /* Inputs */
-  input[type="password"],
-  input[type="text"] {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #555;
-    border-radius: 6px;
-    font-size: 1rem;
-    background-color: #3a3a3a;
-    color: #f2f2f2;
-  }
-  
-  /* Buttons */
-  button {
-    background-color: #444;
-    color: #fff;
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  button:hover {
-    background-color: #666;
-  }
-  
-  button:active {
-    transform: scale(0.98);
-  }
-  
-  /* Error Message */
-  #error-message {
-    margin-top: 0.5em;
-    color: #d9534f;
-    font-size: 0.9rem;
-  }
-  
-  /* Cipher Tool */
-  #cipher-tool {
-    margin-top: 2rem;
-    text-align: left;
-  }
-  
-  #cipher-tool label {
-    margin-bottom: 0.3rem;
-  }
-  
-  #cipherResult {
-    display: inline-block;
-    margin-top: 0.5rem;
-    font-size: 1.1rem;
-    color: #7ed6a5;
-    font-family: 'Ubuntu Condensed', sans-serif;
-  }
-  
-  /* Copy button */
-  #copyButton {
-    margin-top: 1rem;
-    background-color: #444;
-    color: #fff;
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: inline-block;
-  }
-  
-  #copyButton:hover {
-    background-color: #666;
-  }
-  
-  /* Responsive */
-  @media (min-width: 768px) {
-    body {
       padding: 3rem;
-    }
-  
-    h1 {
-      font-size: 2.2rem;
-    }
-  
-    h3 {
-      font-size: 1.3rem;
-    }
-  
-    input, button {
-      font-size: 1.1rem;
-    }
   }
-  
+
+  h1 {
+      font-size: 2.2rem;
+  }
+
+  h3 {
+      font-size: 1.3rem;
+  }
+
+  input, select, button {
+      font-size: 1.1rem;
+  }
+}
