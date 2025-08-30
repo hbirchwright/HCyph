@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=PT+Sans&family=Parisienne&family=Playfair+Display&family=Taviraj:wght@200&family=Ubuntu+Condensed&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/c16d9d560c.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="dark-mode">
 
   <div id="content" style="display:none;">
     <h1>Welcome!</h1>
@@ -24,10 +24,6 @@
       <p><strong>Encrypted:</strong> <span id="cipherResult"></span></p>
       <button id="copyButton" style="display:none;">Copy</button>
     </div>           
-  </div>
-
-  <div id="theme-toggle-wrapper" style="text-align:right; margin-bottom: 1rem;">
-    <button id="theme-toggle">🌙 Dark Mode</button>
   </div>
       
   <div id="password-form">
@@ -127,12 +123,6 @@
         window.getSelection().removeAllRanges();
       };
     }
-
-    // Theme toggle
-    document.getElementById('theme-toggle').addEventListener('click', function () {
-      document.body.classList.toggle('dark-mode');
-      this.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
   </script>
 </body>
 </html>
