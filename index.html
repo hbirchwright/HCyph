@@ -1,142 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HCyph</title>    
-    <link rel="stylesheet" href="main.css">
- 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=PT+Sans&family=Parisienne&family=Playfair+Display&family=Taviraj:wght@200&family=Ubuntu+Condensed&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/c16d9d560c.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCyph</title>    
+  <link rel="stylesheet" href="main.css">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=PT+Sans&family=Parisienne&family=Playfair+Display&family=Taviraj:wght@200&family=Ubuntu+Condensed&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/c16d9d560c.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-        <div id="content" style="display:none;">
-                <h1>Welcome!</h1>
-                <p>This content is password protected.</p>
-                <br>
-                <div id="cipher-tool">
-                        <label for="plainText">Enter text:</label>
-                        <input type="text" id="plainText" placeholder="Type here...">
-                        <button onclick="encryptText()">Encrypt</button>
-                        <p><strong>Encrypted:</strong> <span id="cipherResult"></span></p>
-                        <button id="copyButton" style="display:none;">Copy</button>
-                        </p>
-                </div>           
-        </div>
+  <div id="content" style="display:none;">
+    <h1>Welcome!</h1>
+    <p>This content is password protected.</p>
+    <br>
+    <div id="cipher-tool">
+      <label for="plainText">Enter text:</label>
+      <input type="text" id="plainText" placeholder="Type here...">
+      <button onclick="encryptText()">Encrypt</button>
+      <p><strong>Encrypted:</strong> <span id="cipherResult"></span></p>
+      <button id="copyButton" style="display:none;">Copy</button>
+    </div>           
+  </div>
 
-                <div id="theme-toggle-wrapper" style="text-align:right; margin-bottom: 1rem;">
-                        <button id="theme-toggle">🌙 Dark Mode</button>
-                </div>
-            
-              
-              <div id="password-form">
-                <h1>Welcome to HCyph.</h1>
-                <h3>Please Enter Your Six Digit Pin to Continue</h3>
-                <br>
-                <label for="password">PIN:</label>
-                <input type="password" id="password" name="password">
-                <button onclick="checkPassword()">Enter</button>
-                <p id="error-message" style="color: red; display: none;">Incorrect password. Please try again.</p>
-              </div>
-              
-        <script>
-              const correctPassword = "061507"; // Replace with your desired password
-              
-              function checkPassword() {
-                const passwordInput = document.getElementById("password");
-                const errorMessage = document.getElementById("error-message");
-                const content = document.getElementById("content");
-                const passwordForm = document.getElementById("password-form");
-              
-                if (passwordInput.value === correctPassword) {
-                  content.style.display = "block"; // Show the content
-                  passwordForm.style.display = "none"; // Hide the password form
-                  errorMessage.style.display = "none"; // Hide any previous error message
-                } else {
-                  errorMessage.style.display = "block"; // Show the error message
-                  passwordInput.value = ""; // Clear the input field
-                }
-              }
+  <div id="theme-toggle-wrapper" style="text-align:right; margin-bottom: 1rem;">
+    <button id="theme-toggle">🌙 Dark Mode</button>
+  </div>
+      
+  <div id="password-form">
+    <h1>Welcome to HCyph.</h1>
+    <h3>Please Enter Your Six Digit Pin to Continue</h3>
+    <br>
+    <label for="password">PIN:</label>
+    <input type="password" id="password" name="password">
+    <button onclick="checkPassword()">Enter</button>
+    <p id="error-message" style="color: red; display: none;">Incorrect password. Please try again.</p>
+  </div>
+  
+  <script>
+    // SHA-256 helper
+    async function hashString(str) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
 
-                function getTodayShift() {
-                const today = new Date();
-                return today.getDate(); // e.g., April 5 -> returns 5
-                }
+    // Hash of "061507"
+    const correctHash = "b6b05cd3cb024df7cb6807a12734dcbb58c3ffed15033411e3b2f587cfb744fd";
 
-                function caesarCipher(str, shift) {
-                return str.split('').map(char => {
-                        if (char.match(/[a-z]/i)) {
-                        const base = char === char.toUpperCase() ? 65 : 97;
-                        return String.fromCharCode(((char.charCodeAt(0) - base + shift) % 26) + base);
-                        } else {
-                        return char; // Non-alphabetical characters remain the same
-                        }
-                }).join('');
-                }
+    async function checkPassword() {
+      const passwordInput = document.getElementById("password");
+      const errorMessage = document.getElementById("error-message");
+      const content = document.getElementById("content");
+      const passwordForm = document.getElementById("password-form");
 
-                const substitutionMap = {
-                q: '1', w: '2', e: '3', r: '4', t: '5',
-                y: '6', u: '7', i: '8', o: '9', p: '0',
-                a: '-', s: '/', d: ':', f: ';', g: '(', h: ')',
-                j: '$', k: '&', l: '@', z: '"', x: '.', c: ',', v: '?',
-                b: '!', n: "'", m: '['
-                };
+      const enteredHash = await hashString(passwordInput.value);
 
-                function applyCustomSubstitution(str) {
-                return str.split('').map(char => {
-                const lowerChar = char.toLowerCase();
-                return substitutionMap[lowerChar] !== undefined ? substitutionMap[lowerChar] : char;
-                }).join('');
-                }
+      if (enteredHash === correctHash) {
+        content.style.display = "block";
+        passwordForm.style.display = "none";
+        errorMessage.style.display = "none";
+      } else {
+        errorMessage.style.display = "block";
+        passwordInput.value = "";
+      }
+    }
 
+    function getTodayShift() {
+      const today = new Date();
+      return today.getDate();
+    }
 
-                function encryptText() {
-                const input = document.getElementById("plainText").value;
-                const shift = getTodayShift();
-                const caesar = caesarCipher(input, shift);
-                const encrypted = applyCustomSubstitution(caesar);
-                document.getElementById("cipherResult").textContent = encrypted;
-                }
+    function caesarCipher(str, shift) {
+      return str.split('').map(char => {
+        if (char.match(/[a-z]/i)) {
+          const base = char === char.toUpperCase() ? 65 : 97;
+          return String.fromCharCode(((char.charCodeAt(0) - base + shift) % 26) + base);
+        } else {
+          return char;
+        }
+      }).join('');
+    }
 
-                function encryptText() {
-                const input = document.getElementById("plainText").value;
-                const shift = getTodayShift();
-                const caesar = caesarCipher(input, shift);
-                const encrypted = applyCustomSubstitution(caesar);
-                const cipherResult = document.getElementById("cipherResult");
-                const copyButton = document.getElementById("copyButton");
+    const substitutionMap = {
+      q: '1', w: '2', e: '3', r: '4', t: '5',
+      y: '6', u: '7', i: '8', o: '9', p: '0',
+      a: '-', s: '/', d: ':', f: ';', g: '(', h: ')',
+      j: '$', k: '&', l: '@', z: '"', x: '.', c: ',', v: '?',
+      b: '!', n: "'", m: '['
+    };
 
-                cipherResult.textContent = encrypted;
-                copyButton.style.display = "inline-block"; // Show the copy button
+    function applyCustomSubstitution(str) {
+      return str.split('').map(char => {
+        const lowerChar = char.toLowerCase();
+        return substitutionMap[lowerChar] !== undefined ? substitutionMap[lowerChar] : char;
+      }).join('');
+    }
 
-                // Copy to clipboard when the copy button is clicked
-                copyButton.onclick = function() {
-                        const range = document.createRange();
-                        range.selectNode(cipherResult);
-                        window.getSelection().removeAllRanges();
-                        window.getSelection().addRange(range);
-                        try {
-                        document.execCommand('copy'); // Copy the text to clipboard
-                        alert("Copied to clipboard!");
-                        } catch (err) {
-                        console.error("Error copying text: ", err);
-                        }
-                        window.getSelection().removeAllRanges(); // Clear the selection
-                };
-                }
+    function encryptText() {
+      const input = document.getElementById("plainText").value;
+      const shift = getTodayShift();
+      const caesar = caesarCipher(input, shift);
+      const encrypted = applyCustomSubstitution(caesar);
+      const cipherResult = document.getElementById("cipherResult");
+      const copyButton = document.getElementById("copyButton");
 
+      cipherResult.textContent = encrypted;
+      copyButton.style.display = "inline-block";
 
-                // Theme toggle logic
-                document.getElementById('theme-toggle').addEventListener('click', function () {
-                document.body.classList.toggle('dark-mode');
-                this.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-                });
+      copyButton.onclick = function() {
+        const range = document.createRange();
+        range.selectNode(cipherResult);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        try {
+          document.execCommand('copy');
+          alert("Copied to clipboard!");
+        } catch (err) {
+          console.error("Error copying text: ", err);
+        }
+        window.getSelection().removeAllRanges();
+      };
+    }
 
-        </script>
-              
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      document.body.classList.toggle('dark-mode');
+      this.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+  </script>
 </body>
 </html>
