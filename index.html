@@ -18,7 +18,9 @@
     <p>This content is password protected.</p>
     <br>
     <div id="cipher-tool">
-      <label for="plainText">Enter text:</label>
+      <p style="color:#ccc; font-size:0.9rem;">For decryption, enter the same shift type and any custom/person info used when encrypting.</p>
+
+      <label id="textLabel" for="plainText">Enter text to encrypt:</label>
       <input type="text" id="plainText" placeholder="Type here...">
 
       <label for="shiftType">Choose shift type:</label>
@@ -39,7 +41,8 @@
       </div>
 
       <button onclick="encryptText()">Encrypt</button>
-      <p><strong>Encrypted:</strong> <span id="cipherResult"></span></p>
+      <button onclick="decryptText()">Decrypt</button>
+      <p><strong>Result:</strong> <span id="cipherResult"></span></p>
       <button id="copyButton" style="display:none;">Copy</button>
     </div>           
   </div>
@@ -88,7 +91,7 @@
       return str.split('').map(char => {
         if (char.match(/[a-z]/i)) {
           const base = char === char.toUpperCase() ? 65 : 97;
-          return String.fromCharCode(((char.charCodeAt(0) - base + shift) % 26) + base);
+          return String.fromCharCode(((char.charCodeAt(0) - base + shift + 26) % 26) + base);
         } else {
           return char;
         }
@@ -102,6 +105,10 @@
       j: '$', k: '&', l: '@', z: '"', x: '.', c: ',', v: '?',
       b: '!', n: "'", m: '['
     };
+
+    const reverseSubstitutionMap = Object.fromEntries(
+      Object.entries(substitutionMap).map(([k, v]) => [v, k])
+    );
 
     function applyCustomSubstitution(str) {
       return str.split('').map(char => {
@@ -130,17 +137,36 @@
       const shift = getShift();
       const caesar = caesarCipher(input, shift);
       const encrypted = applyCustomSubstitution(caesar);
+
       const cipherResult = document.getElementById("cipherResult");
-      const copyButton = document.getElementById("copyButton");
-
       cipherResult.textContent = encrypted;
-      copyButton.style.display = "inline-block";
+      document.getElementById("copyButton").style.display = "inline-block";
 
-      copyButton.onclick = function() {
-        navigator.clipboard.writeText(cipherResult.textContent)
-          .then(() => alert("Copied to clipboard!"))
-          .catch(err => console.error("Error copying text: ", err));
-      };
+      document.getElementById("textLabel").textContent = "Enter text to encrypt:";
+    }
+
+    function decryptText() {
+      const input = document.getElementById("plainText").value;
+      const shift = getShift(); // always use user input for decryption
+
+      const reversedSub = input.split('').map(char => {
+        return reverseSubstitutionMap[char] !== undefined ? reverseSubstitutionMap[char] : char;
+      }).join('');
+
+      const decrypted = reversedSub.split('').map(char => {
+        if (char.match(/[a-z]/i)) {
+          const base = char === char.toUpperCase() ? 65 : 97;
+          return String.fromCharCode(((char.charCodeAt(0) - base - shift + 26) % 26) + base);
+        } else {
+          return char;
+        }
+      }).join('');
+
+      const cipherResult = document.getElementById("cipherResult");
+      cipherResult.textContent = decrypted;
+      document.getElementById("copyButton").style.display = "inline-block";
+
+      document.getElementById("textLabel").textContent = "Enter text to decrypt:";
     }
 
     // Show/hide custom input fields
@@ -148,6 +174,14 @@
       const type = this.value;
       document.getElementById("customShiftContainer").style.display = (type === "custom") ? "block" : "none";
       document.getElementById("personShiftContainer").style.display = (type === "person") ? "block" : "none";
+    });
+
+    // Clipboard copy
+    document.getElementById("copyButton").addEventListener("click", function() {
+      const text = document.getElementById("cipherResult").textContent;
+      navigator.clipboard.writeText(text)
+        .then(() => alert("Copied to clipboard!"))
+        .catch(err => console.error("Error copying text: ", err));
     });
   </script>
 </body>
